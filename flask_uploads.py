@@ -234,20 +234,24 @@ class UploadsManager(object):
 
             app = Flask(__name__)
 
-            uploads = UploadsManager(app)
-            uploads.register(UploadSet('photos'))
             sets = (
-                UploadSet('photos', IMAGES),
-                UploadSet('pdf', ('pdf',))
-            )
-            uploads.register(sets)
+                     UploadSet('photos', IMAGES),
+                     UploadSet('pdf', ('pdf',))
+                   )
+            uploads = UploadsManager()
+            uploads.init_app(app, upload_sets=sets)
+
+            uploads.register(UploadSet('photos'))
+
     """
     def __init__(self, app=None):
         if app is not None:
             self.init_app(app)
 
-    def init_app(self, app):
+    def init_app(self, app, upload_sets=None):
         self.app = app
+        if upload_sets is not None:
+            configure_uploads(self.app, upload_sets)
 
     def register(self, upload_sets):
         configure_uploads(self.app, upload_sets)
