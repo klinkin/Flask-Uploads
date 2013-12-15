@@ -253,6 +253,11 @@ class UploadsManager(object):
         if upload_sets is not None:
             configure_uploads(self.app, upload_sets)
 
+        if not hasattr(app, 'extensions'):
+            app.extensions = {}
+
+        app.extensions['uploads'] = self
+
     def register(self, upload_sets):
         configure_uploads(self.app, upload_sets)
 
